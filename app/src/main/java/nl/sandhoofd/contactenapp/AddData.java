@@ -3,6 +3,8 @@ package nl.sandhoofd.contactenapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.channels.FileChannel;
+import java.util.Random;
 
 public class AddData extends AppCompatActivity {
     final int REQUEST_CODE_GALLERY = 999;
@@ -41,6 +44,7 @@ public class AddData extends AppCompatActivity {
     String name, email, phone;
     Button btn_choose;
     ImageView img;
+    String idnummer;
 
     private static final int SELECT_PHOTO = 1;
     private static final int CAPTURE_PHOTO = 2;
@@ -77,19 +81,65 @@ public class AddData extends AppCompatActivity {
         if (resultCode == RESULT_OK){
             Uri targetUri = data.getData();
 //            textTargetUri.setText(targetUri.toString());
-            Toast.makeText(getApplicationContext(), targetUri.toString(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), targetUri.toString(), Toast.LENGTH_LONG).show();
             Bitmap bitmap;
-            imageurl = targetUri.toString();
+            //imageurl = targetUri.toString();
+
             try {
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
                 imageView.setImageBitmap(bitmap);
+                imageurl = saveToInternalStorage(bitmap).toString().trim();
+                Toast.makeText(getApplicationContext(),"Image is saved in:" + saveToInternalStorage(bitmap).toString().trim(), Toast.LENGTH_LONG).show();
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
     }
+private String database() {
+        ContactDbHandler contactDbHandler = new ContactDbHandler(this);
+        SQLiteDatabase sqLiteDatabase = contactDbHandler.getReadableDatabase();
 
+        Cursor cursor = contactDbHandler.getInformation(sqLiteDatabase);
+
+        if(cursor != null && cursor.moveToFirst()){
+            do {
+                idnummer = cursor.getString(0);
+            } while (cursor.moveToNext());
+            contactDbHandler.close();
+    }
+    return idnummer;
+}
+    private String saveToInternalStorage(Bitmap bitmapImage){
+        //database();
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        Random r = new Random();
+        int a = r.nextInt((999999999-123456789)+1)+123456789;
+        idnummer = (Integer.parseInt(database()) + 1) + "-" + a ;
+
+        File mypath=new File(directory,""+idnummer+".jpg");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+//                Toast.makeText(getApplicationContext(), directory.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "ID: " + idnummer, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return ""+mypath;
+    }
 
     public void AddData(View view) {
         name = e_name.getText().toString();

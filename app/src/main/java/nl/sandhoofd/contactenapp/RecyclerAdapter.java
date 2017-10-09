@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.jar.Attributes;
@@ -51,7 +52,29 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
         Log.d("RecyclerAdapter ","url: "+contact.getImage());
         Uri.parse(contact.getImage());
-        Picasso.with(context).load("https://api.learn2crack.com/android/images/donut.png").into(holder.img);
+        File f = new File(contact.getImage());
+//        Picasso.with(context).load("https://api.learn2crack.com/android/images/donut.png").into(holder.img);
+        //Picasso.with(context).load(contact.getImage()).into(holder.img);
+        try {
+            File file =new File(contact.getImage());
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+
+//            ImageView img=(ImageView)context.findViewById(R.id.imgPicker);
+//            img.setImageBitmap(b);
+            holder.img.setImageBitmap(b);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void loadImageFromStorage(String path)
+    {
+
+
+
     }
 
     @Override

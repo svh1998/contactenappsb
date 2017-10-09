@@ -60,4 +60,6 @@ public class BackgroundTask extends AsyncTask<String , Void, String> {
             }
         }, 1000); // 3000 milliseconds delay
     }
+
+
 }

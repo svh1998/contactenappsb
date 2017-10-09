@@ -70,7 +70,7 @@ public class DisplayList extends AppCompatActivity implements SearchView.OnQuery
         contact.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), AddData.class);
+                Intent intent = new Intent(getApplicationContext(), Info.class);
                 startActivity(intent);
                 return false;
             }
