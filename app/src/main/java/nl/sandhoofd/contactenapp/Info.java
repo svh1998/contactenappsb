@@ -32,66 +32,66 @@ public class Info extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        Volley.newRequestQueue(this);
-        try {
-            factory = XmlPullParserFactory.newInstance();
-            parser = factory.newPullParser();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }
-        StringRequest stringRequest = new StringRequest("https://www.w3schools.com/xml/note.xml", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    parser.setInput(new StringReader(response));
-                    int event = parser.getEventType();
-
-                    String tag = ""; String value="";
-
-                    while (event != XmlPullParser.END_DOCUMENT) {
-                        tag = parser.getName();
-
-
-                        switch (event) {
-                            case XmlPullParser.START_TAG:
-                                if(tag.equals("quote")) {
-                                    quote = new Quote();
-                                    quotes.add(quote);
-                                }
-                                break;
-                            case XmlPullParser.TEXT:
-                                value = parser.getText();
-                                break;
-                            case XmlPullParser.END_TAG:
-
-                                switch (tag) {
-                                    case "quote":
-                                        quote.setQuote(value);
-                                }
-                                break;
-                        }
-                        event = parser.next();
-                    }
-
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                for(int i = 0; i<quotes.size(); i++){
-                   quotes.get(i).print_quote();
-                }
-            }
-        }, new ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        requestQueue.add(stringRequest);
-
+//        Volley.newRequestQueue(this);
+//        try {
+//            factory = XmlPullParserFactory.newInstance();
+//            parser = factory.newPullParser();
+//        } catch (XmlPullParserException e) {
+//            e.printStackTrace();
+//        }
+//        StringRequest stringRequest = new StringRequest("https://www.w3schools.com/xml/note.xml", new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    parser.setInput(new StringReader(response));
+//                    int event = parser.getEventType();
+//
+//                    String tag = ""; String value="";
+//
+//                    while (event != XmlPullParser.END_DOCUMENT) {
+//                        tag = parser.getName();
+//
+//
+//                        switch (event) {
+//                            case XmlPullParser.START_TAG:
+//                                if(tag.equals("quote")) {
+//                                    quote = new Quote();
+//                                    quotes.add(quote);
+//                                }
+//                                break;
+//                            case XmlPullParser.TEXT:
+//                                value = parser.getText();
+//                                break;
+//                            case XmlPullParser.END_TAG:
+//
+//                                switch (tag) {
+//                                    case "quote":
+//                                        quote.setQuote(value);
+//                                }
+//                                break;
+//                        }
+//                        event = parser.next();
+//                    }
+//
+//                } catch (XmlPullParserException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                for(int i = 0; i<quotes.size(); i++){
+//                   quotes.get(i).print_quote();
+//                }
+//            }
+//        }, new ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
+//
+//        requestQueue.add(stringRequest);
+//
         }
     }
 
