@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,7 @@ public class DisplayList extends AppCompatActivity implements SearchView.OnQuery
                 Contact contact = new Contact(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
                 arrayList.add(contact);
             } while (cursor.moveToNext());
+            Log.d("Array", arrayList + "");
             contactDbHandler.close();
             adapter = new RecyclerAdapter(arrayList, this);
             recyclerView.setAdapter(adapter);
